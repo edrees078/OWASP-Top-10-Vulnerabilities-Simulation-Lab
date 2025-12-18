@@ -1,63 +1,55 @@
-# SnowNoVA – OWASP Top 10 Educational Web Security Site
+# SnowNoVA – Educational Web App Demonstrating OWASP Top 10 Vulnerabilities
 
-SnowNoVA is a small web application I built to practise and explain web security concepts from the OWASP Top 10.  
-It runs locally on XAMPP and shows simple vulnerable examples next to more secure versions.
+SnowNoVA is a lightweight local web application created to demonstrate and explore key concepts from the OWASP Top 10.  
+It is designed for educational purposes and runs locally using XAMPP. Each page showcases an insecure implementation alongside a more secure version for comparison.
 
-## What the site includes
+## 🔍 What You'll Find in the Project
 
-- Example pages for common web security issues, such as:
+- Hands-on examples for well-known web vulnerabilities, including:
   - SQL Injection (SQLi)
   - Cross-Site Scripting (XSS)
-  - Insecure login / authentication problems
-  - Security Logging and Monitoring Failures
-  - Software and Data Integrity Failures
-- Short notes on each page about:
-  - what the vulnerability is,
-  - how an attacker could abuse it,
-  - and what a more secure approach looks like.
-- Simple logging examples to compare weak logging vs better logging.
+  - Weak or Broken Authentication
+  - Security Logging & Monitoring Failures
+  - Software & Data Integrity Issues
+- Each vulnerable page includes:
+  - A short explanation of the vulnerability
+  - How attackers might exploit it
+  - A simple demonstration of a more secure solution
+- Comparison between weak and improved logging techniques
 
-## Tech Stack
+## 🛠️ Technologies Used
 
 - **Frontend:** HTML, CSS, basic JavaScript  
-- **Backend:** PHP (XAMPP / local server)  
+- **Backend:** PHP (served via XAMPP)  
 - **Database:** MySQL  
 
-## How to run (local XAMPP)
+## 🚀 How to Set It Up Locally
 
-1. Copy the project folder into your XAMPP `htdocs` directory, for example:  
-   `C:\xampp\htdocs\SnowNoVA`
+1. Place the project folder inside your XAMPP `htdocs` directory:  
+   Example path: `C:\xampp\htdocs\SnowNoVA`
 
-2. Start Apache and MySQL from XAMPP Control Panel.
+2. Open the XAMPP Control Panel and start **Apache** and **MySQL**.
 
-3. Create the database in MySQL:  
-   - Go to `http://localhost/phpmyadmin`  
-   - Create a database (e.g. `snow_nova`)
-   - Import the SQL file used by the project. (The SQL files contain demo data only (test users created for the project, not real accounts)
+3. Set up the MySQL database:
+   - Navigate to `http://localhost/phpmyadmin`
+   - Create a new database (e.g., `snow_nova`)
+   - Import the provided `.sql` file to populate the database with demo/test data
 
-4. Update the database config in the project:  
-   - Open the PHP config file that holds the connection details (e.g. `config.php` or `config/db.php`)  
-   - Set your own:
-     - host  
-     - username  
-     - password  
-     - database name  
+4. Configure the database connection:
+   - Open the project's PHP config file (e.g., `config.php` or `db/config.php`)
+   - Update these fields with your local settings:
+     - host (usually `localhost`)
+     - username (default is `root`)
+     - password (default is empty)
+     - database name (`snow_nova` or the one you created)
 
-5. Open the site in your browser:  
-   `http://localhost/SnowNoVA`
+5. Launch the app in your browser:  
+   Visit `http://localhost/SnowNoVA`
 
-   
-> ⚠️ This project is for educational purposes only.  
-> Do not deploy these vulnerable examples to a public/production server.
-
-
-
-
+> ⚠️ **Disclaimer:**  
+> This application is intentionally vulnerable and is meant for educational/demo use only.  
+> Never upload or run this project on a public-facing server or in a production environment.
 
 <p align="center">
-  <img src="SnowNoVA/assets/img/main.png" alt="SnowNoVA main page" width="900">
+  <img src="SnowNoVA/assets/img/main.png" alt="SnowNoVA Homepage" width="900">
 </p>
-
-
-
-

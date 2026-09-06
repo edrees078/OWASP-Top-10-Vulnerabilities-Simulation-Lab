@@ -1,38 +1,7 @@
 {
-	"folders": [
-		{
-			"path": "../../../Users/eabuh/OneDrive/Documents/Edrees' Folder/2.Sınıf Bahar/Demo"
-		},
-		{
-			"path": "../../../Users/eabuh/OneDrive/Documents/Edrees' Folder/2.Sınıf Bahar/Programlama Dilleri/deneme-Python"
-		},
-		{
-			"path": "../../../Users/eabuh/OneDrive/Documents/Edrees' Folder/2.Sınıf Bahar/İnternet Tabanlı Programlama/Snow Nova.idris"
-		},
-		{
-			"path": "../Snow Nova.idris1"
-		},
-		{
-			"path": "../../../Users/eabuh/OneDrive/Documents/Edrees' Folder/2.Sınıf Bahar/İnternet Tabanlı Programlama/Proje Temeller/NextGen Website"
-		},
-		{
-			"path": "../SnowNoVAWebsite"
-		},
-		{
-			"path": "../snowNoVAFinal"
-		},
-		{
-			"path": "../snowNoVAFinal22"
-		},
-		{
-			"path": "../snowNoVAFinal3"
-		},
-		{
-			"path": "../right-resume_free_1-2-0"
-		},
-		{
-			"path": "."
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": "."
+    }
+  ]
 }

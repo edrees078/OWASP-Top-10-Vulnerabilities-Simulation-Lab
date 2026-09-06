@@ -4,3 +4,16 @@ __pycache__/
 *.log
 *.zip
 .DS_Store
+
+# Local editor settings and workspaces may contain machine-specific paths.
+.vscode/
+.idea/
+*.code-workspace
+# Keep the shared workspace portable; use relative folder paths in this file.
+!SnowNoVA/Demo.code-workspace
+
+# Keep local environment configuration out of version control.
+.env
+.env.*
+!.env.example
+!.env.sample

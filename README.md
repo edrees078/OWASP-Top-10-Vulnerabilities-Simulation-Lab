@@ -1,55 +1,89 @@
-# SnowNoVA – Educational Web App Demonstrating OWASP Top 10 Vulnerabilities
+# SnowNOVA educational vulnerability lab
 
-SnowNoVA is a lightweight local web application created to demonstrate and explore key concepts from the OWASP Top 10.  
-It is designed for educational purposes and runs locally using XAMPP. Each page showcases an insecure implementation alongside a more secure version for comparison.
+SnowNOVA is an educational website with OWASP vulnerability lessons and intentionally vulnerable PHP exercises. It uses plain HTML, CSS, JavaScript, PHP sessions, and MySQL/MariaDB through `mysqli`. Frontend assets include Bootstrap, jQuery, and Swiper; some dependencies load from external CDNs. No Composer or npm installation is required by the inspected project.
 
-## 🔍 What You'll Find in the Project
+> **Local educational use only.** Run the lab on an isolated development machine using disposable, synthetic data. Do not deploy it publicly, expose it to your LAN or the internet, or enter real credentials or personal information. Intentional SQL injection, XSS, and insecure authentication are part of the teaching material. Opening a localhost URL does not itself restrict Apache's network access: ensure the server is restricted to local access before starting it, and keep firewall protections enabled.
 
-- Hands-on examples for well-known web vulnerabilities, including:
-  - SQL Injection (SQLi)
-  - Cross-Site Scripting (XSS)
-  - Weak or Broken Authentication
-  - Security Logging & Monitoring Failures
-  - Software & Data Integrity Issues
-- Each vulnerable page includes:
-  - A short explanation of the vulnerability
-  - How attackers might exploit it
-  - A simple demonstration of a more secure solution
-- Comparison between weak and improved logging techniques
+## Project layout
 
-## 🛠️ Technologies Used
+- `SnowNoVA/index.html`: application homepage.
+- `SnowNoVA/login.*`, `signup.*`, and `subscribe.php`: main account and subscription flows.
+- `SnowNoVA/Vulnerabilities/`: lessons and exercises, including SQL injection, XSS, authentication, and logging examples.
+- `SnowNoVA/sql databases/`: SQL exports used in the import map below.
+- `SnowNoVA/Vulnerabilities/sql databases/`: byte-identical copies of those exports at inspection time; do not import both sets.
+- `SnowNoVA/resumes/`: contributor profile pages.
+- `SnowNoVA/css/`, `js/`, `fonts/`, `images/`, `before/`, and `assets/`: frontend resources, with additional copies under some subdirectories.
 
-- **Frontend:** HTML, CSS, basic JavaScript  
-- **Backend:** PHP (served via XAMPP)  
-- **Database:** MySQL  
+## XAMPP setup on Windows
 
-## 🚀 How to Set It Up Locally
+The inspected installation was `D:\xampp`, with PHP 8.2.12, `mysqli` and `mysqlnd` enabled, and Apache configured for port 80 with document root `D:/xampp/htdocs`. These describe the inspected environment, not a requirement to use that exact PHP version. Adjust paths for your own installation.
 
-1. Place the project folder inside your XAMPP `htdocs` directory:  
-   Example path: `C:\xampp\htdocs\SnowNoVA`
+1. Ensure XAMPP's Apache and database services are restricted to your isolated local environment. Do not open firewall ports, enable port forwarding, or create a public tunnel for this lab.
+2. Check whether `D:\xampp\htdocs\SnowNoVA` already exists. Do not overwrite an existing installation or its data.
+3. Copy the **inner `SnowNoVA` application folder**, not the whole repository, into `D:\xampp\htdocs\SnowNoVA`. The resulting homepage path should be `D:\xampp\htdocs\SnowNoVA\index.html`. Keep Git metadata outside the web document root.
+4. Open `D:\xampp\xampp-control.exe` and start Apache and MySQL (the database service in XAMPP uses MariaDB).
+5. Prepare the databases using the import map below. Connection settings are embedded in individual PHP files rather than a shared configuration file. They must match your isolated local database setup; do not copy private settings into this repository or weaken an existing database installation to match the lab.
+6. Open [the homepage](http://localhost/SnowNoVA/index.html) through Apache. Opening the HTML directly from disk will not execute PHP handlers.
 
-2. Open the XAMPP Control Panel and start **Apache** and **MySQL**.
+Some frontend resources require internet access to their CDNs. That does not require making the local application accessible to other machines. If Apache cannot start, check the XAMPP control panel and port conflicts rather than disabling firewall protections. If you use a different HTTP port, adjust the local URLs accordingly.
 
-3. Set up the MySQL database:
-   - Navigate to `http://localhost/phpmyadmin`
-   - Create a new database (e.g., `snow_nova`)
-   - Import the provided `.sql` file to populate the database with demo/test data
+This setup gets the application into the expected subfolder, but known path inconsistencies mean some exercises will still need fixes. A copied application is separate from this Git checkout: future code changes will not automatically appear in the copy served by XAMPP.
 
-4. Configure the database connection:
-   - Open the project's PHP config file (e.g., `config.php` or `db/config.php`)
-   - Update these fields with your local settings:
-     - host (usually `localhost`)
-     - username (default is `root`)
-     - password (default is empty)
-     - database name (`snow_nova` or the one you created)
+## Database import map
 
-5. Launch the app in your browser:  
-   Visit `http://localhost/SnowNoVA`
+The supplied exports contain seed account/subscriber data, including plaintext passwords. Treat them as sensitive, do not publish or reproduce their contents, and prefer reviewed synthetic fixtures for local exercises. The steps below describe a manual setup only; they are not an instruction to import into an existing or shared database.
 
-> ⚠️ **Disclaimer:**  
-> This application is intentionally vulnerable and is meant for educational/demo use only.  
-> Never upload or run this project on a public-facing server or in a production environment.
+| Export under `SnowNoVA/sql databases/` | Database to select | Tables | Consumers |
+| --- | --- | --- | --- |
+| `user_accounts.sql` | `user_accounts` | `users`, `profiles`, `event_logs` | Main login/signup and several login exercises |
+| `user_management1.sql` | `user_management1` | `users` | Identification registration and `loginSami.php` |
+| `mywebsite.sql` | `mywebsite` | `subscribers` | `subscribe.php`, which currently requests `myWebsite` |
 
-<p align="center">
-  <img src="SnowNoVA/assets/img/main.png" alt="SnowNoVA Homepage" width="900">
-</p>
+The same three filenames also exist under `SnowNoVA/Vulnerabilities/sql databases/`. Use just one set; the first directory is the reference location for this guide.
+
+### Manual phpMyAdmin import
+
+1. Open [local phpMyAdmin](http://localhost/phpmyadmin/).
+2. For each row in the map, create a separate **empty** database with the indicated name and `utf8mb4_general_ci` collation. If the name already exists, stop and inspect your setup rather than dropping or overwriting it.
+3. Select that database in the sidebar, open **Import**, choose the matching reviewed SQL file, and select **Go/Import**.
+4. Check the import result and confirm that the expected tables appear. Repeat for the other two databases.
+
+The exports do not include `CREATE DATABASE` or `USE` statements: selecting the correct database first is essential. They include table definitions and seed records and are not designed to be re-imported into populated databases. Their headers record MariaDB 10.4.32 and PHP 8.2.12 at export time; import compatibility was not runtime-tested during inspection.
+
+The subscription code uses `myWebsite`, while the dump identifies `mywebsite`. This casing difference can cause problems on systems with case-sensitive database names.
+
+`SnowNoVA/Vulnerabilities/SecuritySum.php` also expects a **fourth database, `security_logs`**, containing `event_logs`. No export for that database was found. The `event_logs` table in `user_accounts` does not satisfy this separate connection. The logging exercise needs a deliberate schema/configuration decision; importing the three supplied databases alone does not resolve it.
+
+SQL exports and the encrypted account artifact are inside the application tree. Prevent HTTP access to those data artifacts before serving the lab; do not assume that an unlinked file is inaccessible. No database or Apache configuration changes are supplied by this README.
+
+## Known limitations
+
+- **Mixed application paths:** links mix `/SnowNoVA/...`, `/Vulnerabilities/...`, and relative URLs. Missing targets include `index1.html`, `signin.html`, and `blog-single.html`. No single deployment location fixes all paths.
+- **Broken redirects:** `process.php` points to a nonexistent root-level `XSS.php`, and `Vulnerabilities/loginEn/login.php` points to a nonexistent sibling `sqli_applied.html`.
+- **Identification login wiring:** `loginSami.php` submits an email field to a handler expecting a username and a different database. Its hash verification also disagrees with the registration exercise's plaintext storage. Session/redirect handling follows HTML output and can depend on output buffering.
+- **Duplicate usernames:** main login expects exactly one matching user, while the supplied schema/data permits duplicates. A valid password alone may therefore be insufficient to log in.
+- **Simulated email:** password reset displays a success message without sending a reset email; subscription stores an address and claims confirmation delivery without an email-sending implementation.
+- **Logging exercise:** besides its missing database, it records success before checking credentials and displays logs without an authorization gate. Do not treat it as production logging or administration.
+- **Intentional vulnerabilities:** exercise handlers include SQL injection, reflected/stored XSS, plaintext password handling, and credential disclosure. Preserve their teaching purpose when fixing accidental navigation or wiring defects. Static administration pages are not protected server-side administration.
+- **Dependency and asset maintenance:** bundled and CDN dependencies coexist, some CDN URLs are unversioned, and assets are duplicated. Full offline operation and browser compatibility have not been established.
+
+## Read-only validation
+
+Run these PowerShell commands from the repository root. Adjust the PHP path if necessary; Node.js must be available on `PATH` for the JavaScript checks.
+
+```powershell
+Get-ChildItem .\SnowNoVA -Recurse -Filter *.php |
+    ForEach-Object { & D:\xampp\php\php.exe -n -l $_.FullName }
+
+Get-ChildItem .\SnowNoVA -Recurse -Filter *.js |
+    ForEach-Object { node --check $_.FullName }
+
+git diff --check
+git status --short --branch
+```
+
+PHP lint parses files without running request handlers, and `node --check` checks external JavaScript syntax without executing the application. Review every result; syntax checks do not establish correct authentication, working database connections, valid links, or safe runtime behavior. They do not check inline JavaScript in HTML/PHP.
+
+At inspection time, all 15 PHP files and 19 external JavaScript files passed syntax checks. No automated test suite or CI configuration was found; the `test.html` pages are content/demo pages. The inspection did not import databases or exercise application requests.
+
+For manual review after an isolated setup, open the homepage, inspect the browser Console and Network panels, and follow navigation links. Test forms only with disposable data in a disposable database: signup, subscription, and logging requests can write records. Expect the limitations above rather than assuming all exercises work after import.

@@ -69,20 +69,21 @@ SQL exports and the encrypted account artifact are inside the application tree. 
 
 ## Read-only validation
 
-Run these PowerShell commands from the repository root. Adjust the PHP path if necessary; Node.js must be available on `PATH` for the JavaScript checks.
+Run the [syntax validation script](scripts/validate-syntax.ps1) from PowerShell. From the repository root, use the command below; adjust the PHP path for your installation. Node.js must be available on `PATH`, or supplied with `-NodePath`. If PHP is on `PATH`, you can omit `-PhpPath`.
 
 ```powershell
-Get-ChildItem .\SnowNoVA -Recurse -Filter *.php |
-    ForEach-Object { & D:\xampp\php\php.exe -n -l $_.FullName }
-
-Get-ChildItem .\SnowNoVA -Recurse -Filter *.js |
-    ForEach-Object { node --check $_.FullName }
+.\scripts\validate-syntax.ps1 -PhpPath 'D:\xampp\php\php.exe'
+$LASTEXITCODE
 
 git diff --check
 git status --short --branch
 ```
 
-PHP lint parses files without running request handlers, and `node --check` checks external JavaScript syntax without executing the application. Review every result; syntax checks do not establish correct authentication, working database connections, valid links, or safe runtime behavior. They do not check inline JavaScript in HTML/PHP.
+The script finds the application relative to its own location, so invoking it by its full path also works from another directory. It runs PHP with `-n -l` (no `php.ini`) and Node.js with `--check`, temporarily clearing `NODE_OPTIONS` to prevent preloaded code. It writes no reports or application files, starts no services, and does not run request handlers or connect to databases.
+
+Exit codes are **0** when all checks pass, **1** when a file fails validation, and **2** for missing tools or an unreadable/incomplete application tree. The summary gives file counts and failures. Failed files are listed by relative path; native parser diagnostics are suppressed because they can include sensitive source excerpts.
+
+The script skips contributor `resumes` directories, dependency directories (`node_modules`, `vendor`), Git directories, and symbolic links/junctions. It checks external `.php` and `.js` files only; SQL exports and other data artifacts are not read. Syntax checks do not establish correct authentication, working database connections, valid links, or safe runtime behavior, and do not check inline JavaScript in HTML/PHP.
 
 At inspection time, all 15 PHP files and 19 external JavaScript files passed syntax checks. No automated test suite or CI configuration was found; the `test.html` pages are content/demo pages. The inspection did not import databases or exercise application requests.
 

@@ -10,6 +10,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-header("Location: XSS.php"); // Redirect back to the form page
+header("Location: Vulnerabilities/XSS.php"); // Redirect back to the form page
 exit();
 ?>

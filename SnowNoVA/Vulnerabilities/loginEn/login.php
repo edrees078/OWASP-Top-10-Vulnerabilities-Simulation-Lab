@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($password === $user['password']) {
                 // Authentication successful
                 $_SESSION["username"] = $username;
-                header("Location: sqli_applied.html");
+                header("Location: ../sqli_applied.html");
                 exit;
             } else {
                 // Invalid password

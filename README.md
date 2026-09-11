@@ -59,7 +59,6 @@ SQL exports and the encrypted account artifact are inside the application tree. 
 ## Known limitations
 
 - **Mixed application paths:** links mix `/SnowNoVA/...`, `/Vulnerabilities/...`, and relative URLs. Missing targets include `index1.html`, `signin.html`, and `blog-single.html`. No single deployment location fixes all paths.
-- **Broken redirect:** `Vulnerabilities/loginEn/login.php` points to a nonexistent sibling `sqli_applied.html`.
 - **Identification login wiring:** `loginSami.php` submits an email field to a handler expecting a username and a different database. Its hash verification also disagrees with the registration exercise's plaintext storage. Session/redirect handling follows HTML output and can depend on output buffering.
 - **Duplicate usernames:** main login expects exactly one matching user, while the supplied schema/data permits duplicates. A valid password alone may therefore be insufficient to log in.
 - **Simulated email:** password reset displays a success message without sending a reset email; subscription stores an address and claims confirmation delivery without an email-sending implementation.

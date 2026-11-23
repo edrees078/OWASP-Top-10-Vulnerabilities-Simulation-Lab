@@ -56,6 +56,24 @@ The subscription code uses `myWebsite`, while the dump identifies `mywebsite`. T
 
 SQL exports and the encrypted account artifact are inside the application tree. Prevent HTTP access to those data artifacts before serving the lab; do not assume that an unlinked file is inaccessible. No database or Apache configuration changes are supplied by this README.
 
+### Proposed logging schema (not implemented)
+
+The separate `security_logs.event_logs` table still needs a reviewed schema. The logging handler inserts `username`, `action`, and `ip_address`, and reads `id`, those three fields, and `timestamp`. The following is a proposal for an isolated manual lab setup, not an existing schema or an instruction to change a database.
+
+| Field | Proposed definition | Purpose |
+| --- | --- | --- |
+| `id` | `BIGINT UNSIGNED`, primary key, auto-increment | Identify each event without requiring the handler to supply an ID. |
+| `username` | `VARCHAR(255) NOT NULL` | Store a disposable synthetic username. |
+| `action` | `VARCHAR(255) NOT NULL` | Store the exercise event description. |
+| `ip_address` | `VARCHAR(45) NOT NULL` | Accommodate textual IPv4 and IPv6 addresses. |
+| `timestamp` | `TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP` | Supply the time when the handler omits this field. |
+
+Before implementation, review field lengths against the handler inputs and choose a consistent lab timezone and character set. Keep the table separate from `user_accounts.event_logs`; do not move or reuse existing records. No foreign key to an account table is proposed, since an event may describe an unsuccessful login.
+
+A future, separately reviewed implementation should use a new empty local `security_logs` database and synthetic fixtures only. Verify the five columns and generated ID/time values in that disposable setup before exercising the handler. Signup, login logging, and other requests may write records. This documentation adds no SQL export, migration, seed data, connection settings, or database changes.
+
+Creating the table alone would not make the exercise production-ready: it currently records success before validating credentials and displays logs without an authorization gate. Preserve and explain those teaching behaviors when reviewing any future schema work.
+
 ## Known limitations
 
 - **Mixed application paths:** links mix `/SnowNoVA/...`, `/Vulnerabilities/...`, and relative URLs. Missing targets include `index1.html`, `signin.html`, and `blog-single.html`. No single deployment location fixes all paths.

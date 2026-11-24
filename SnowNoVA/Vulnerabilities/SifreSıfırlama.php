@@ -94,7 +94,7 @@
         <?php
         if(isset($_POST['email'])) {
             
-            echo "<div class='success-message'>Şifre sıfırlama bağlantısı e-postanıza başarıyla gönderildi.</div>";
+            echo "<div class='success-message'>Simülasyon: Şifre sıfırlama bağlantısı gönderilmiş gibi gösterilir; gerçek e-posta gönderilmez.</div>";
         }
         ?>
         <div class="mb-3">

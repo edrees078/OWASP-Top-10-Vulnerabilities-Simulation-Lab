@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email'])) {
 
         // Execute the statement
         if ($stmt->execute()) {
-            echo "Abone olduğunuz için teşekkürler. Aboneliğinizi onaylamak için lütfen e-postanızı kontrol edin.";
+            echo "Abone olduğunuz için teşekkürler. Onay e-postası gönderimi simüle edilir; gerçek e-posta gönderilmez.";
         } else {
             echo "Üzgünüz, aboneliğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.";
         }
